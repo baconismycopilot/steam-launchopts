@@ -72,15 +72,36 @@ Appids are visible in a game's Steam store URL
 `steam-launchopts list`/a browsed `appmanifest_*.acf` file for anything
 already installed.
 
+Because an appid is an opaque number, a typo would otherwise be
+indistinguishable from a real game. `set` refuses an appid that is
+neither in your config nor installed on this machine:
+
+```console
+$ steam-launchopts set 553851 "%command% -show-fps"
+error: appid 553851 is not in this account's config and no installed game
+has it, so this is most likely a typo. Pass --force to add it anyway.
+```
+
+Use `--force` for a game you own but haven't installed yet.
+
 ## Steam and file safety
 
 Steam owns `localconfig.vdf` and rewrites it whenever it exits, which
 would silently undo an edit made while it's running. To avoid that,
-`set` and `clear` check whether Steam is running first:
+`set` and `clear` check whether Steam is running before writing:
 
 - If it's running, you're prompted to confirm a shutdown. On yes, the
-  tool runs `steam -shutdown` (a clean IPC shutdown, not a kill) and
-  waits for the process to exit before writing.
+  tool runs `steam -shutdown` (a clean IPC shutdown, not a kill), waits
+  for the process to exit, and re-reads the file Steam just rewrote
+  before applying the change.
+- The check happens only once a write is actually needed. A bad `--file`
+  path, a typo'd appid, or a `clear` on a game that has no launch options
+  will never cost you a running game session.
+- Writes go to a temporary file and are moved into place with
+  `os.replace`, so an interrupted run leaves the original intact.
+- `--skip-steam-check` writes without looking for Steam at all. It's for
+  installs where the process isn't detectable (and is only safe once
+  Steam is genuinely closed).
 - `get` and `list` are read-only and work regardless of whether Steam is
   running.
 
