@@ -1,0 +1,20 @@
+[project]
+name = "steam-launchopts"
+version = "0.1.0"
+description = "Get, set, and clear per-game Steam launch options from the command line"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "baconismycopilot", email = "justondroney@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "vdf>=3.4",
+]
+
+[project.scripts]
+steam-launchopts = "steam_launchopts:main"
+
+[build-system]
+requires = ["uv_build>=0.11.29,<0.12.0"]
+build-backend = "uv_build"
