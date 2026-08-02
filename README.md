@@ -110,4 +110,16 @@ would silently undo an edit made while it's running. To avoid that,
 ```console
 $ uv sync
 $ uv run steam-launchopts --help
+$ uv run pytest
+$ uv run ruff check . && uv run ruff format .
 ```
+
+The test suite covers the failure modes that motivated it: reading and
+writing under a non-UTF-8 locale, never shutting Steam down for an
+operation that turns out to be a no-op or an error, re-reading the config
+after Steam rewrites it on exit, rejecting typo'd appids, and treating an
+empty `LaunchOptions` as unset. Tests never touch a real Steam install —
+`STEAM_ROOT` is redirected to a temporary directory for every test.
+
+CI runs the same lint, format, test, and build steps on every push and
+pull request.

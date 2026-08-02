@@ -3,6 +3,7 @@
 Edits ~/.local/share/Steam/userdata/<id>/config/localconfig.vdf, which is
 the same file Steam's "Launch Options" field in Properties writes to.
 """
+
 import argparse
 import glob
 import os
@@ -88,7 +89,9 @@ def get_apps(data):
     try:
         return data["UserLocalConfigStore"]["Software"]["Valve"]["Steam"]["apps"]
     except KeyError:
-        sys.exit("error: unexpected localconfig.vdf structure (Software/Valve/Steam/apps not found)")
+        sys.exit(
+            "error: unexpected localconfig.vdf structure (Software/Valve/Steam/apps not found)"
+        )
 
 
 def library_paths():
