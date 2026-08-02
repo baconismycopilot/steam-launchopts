@@ -1,5 +1,8 @@
 # steam-launchopts
 
+[![CI](https://github.com/baconismycopilot/steam-launchopts/actions/workflows/ci.yml/badge.svg)](https://github.com/baconismycopilot/steam-launchopts/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Get, set, and clear per-game Steam launch options from the command line —
 the same setting Steam's UI exposes under a game's *Properties → Launch
 Options*.
@@ -107,11 +110,14 @@ would silently undo an edit made while it's running. To avoid that,
 
 ## Development
 
+Common tasks are wrapped in the `Makefile`; `make` on its own lists them:
+
 ```console
-$ uv sync
-$ uv run steam-launchopts --help
-$ uv run pytest
-$ uv run ruff check . && uv run ruff format .
+$ make install        # uv sync
+$ make test           # uv run pytest
+$ make lint format    # ruff check / ruff format
+$ make check          # everything CI runs
+$ make install-tool   # editable global install
 ```
 
 The test suite covers the failure modes that motivated it: reading and
